@@ -11,12 +11,13 @@ export const OrderScreen = () => {
     onOpen: () => console.log("opened"),
     shouldReconnect: (closeEvent) => true,
     onMessage: (_msg) => {
+      console.log('ws?.lastJsonMessage: ', ws?.lastJsonMessage);
       if (ws?.lastJsonMessage?.length == 2) {
         let values = ws?.lastJsonMessage[1];
         if (values.length === 3) {
           handleMap(values);
         } else if(values.length>3){
-          values.map((value) => {
+          values.forEach((value) => {
             handleMap(value);
           });
         }
@@ -28,21 +29,25 @@ export const OrderScreen = () => {
       if (values[2] > 0) {
         let bid_payload = {
           count: values[1],
-          amount: values[2],
+          amount: values[2].toFixed(4),
           price: values[0],
+          total: values[2].toFixed(4)
         };
         let updated_bids = [];
         if (bids.length) {
           let _bids = [...bids];
-          _bids.forEach((x) => {
-            if (x.price === bid_payload.price) {
+          let total_bid=0
+          _bids.forEach((bid) => {
+            total_bid+=Number(bid.amount)
+            if (bid.price === bid_payload.price) {
               updated_bids.push(bid_payload);
             } else {
-              updated_bids.push(x);
+              bid.total=total_bid
+              updated_bids.push(bid);
             }
           });
-          let data=updated_bids.map(x=>{
-            return [x.price,x.count]
+          let data=updated_bids.map(bid=>{
+            return [bid.price,bid.amount]
           })
           setseries([...data])
           setbids(prev=>[...updated_bids]);
@@ -53,17 +58,21 @@ export const OrderScreen = () => {
       } else {
         let ask_payload = {
           count: values[1],
-          amount: values[2],
+          amount:Math.abs(values[2].toFixed(4)),
           price: values[0],
+          total: Math.abs(values[2].toFixed(4))
         };
         let updated_asks = [];
         if (asks.length) {
           let _asks = [...asks];
-          _asks.forEach((x) => {
-            if (x.price === ask_payload.price) {
+          let total_bid=0
+          _asks.forEach((ask) => {
+            total_bid+=ask.amount
+            if (ask.price === ask_payload.price) {
               updated_asks.push(ask_payload);
             } else {
-              updated_asks.push(x);
+              ask.total=total_bid
+              updated_asks.push(ask);
             }
           });
           setasks(prev=>[...updated_asks]);
@@ -75,11 +84,11 @@ export const OrderScreen = () => {
     } else if (values[2] == 0) {
       if (values[2] == 1) {
         let remove_bids = [...bids];
-        let filter_bids = remove_bids.filter((x) => x.price !== values[0]);
+        let filter_bids = remove_bids.filter((bid) => bid.price !== values[0]);
         setbids([...filter_bids]);
       } else if (values[2] == -1) {
         let remove_asks = [...asks];
-        let filter_asks = remove_asks.filter((x) => x.price !== values[0]);
+        let filter_asks = remove_asks.filter((ask) => ask.price !== values[0]);
         setbids([...filter_asks]);
       }
     }

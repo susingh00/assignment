@@ -9,11 +9,11 @@ export const ChartScreen = () => {
     onOpen: () => console.log("opened"),
     shouldReconnect: (closeEvent) => true,
     onMessage: (_msg) => {
-      console.log('ws?.lastJsonMessage: ', ws?.lastJsonMessage);
-      if(timeFrame.changed){
-        series.current=[]
-      }
+      // console.log('ws?.lastJsonMessage: ', ws?.lastJsonMessage);
       if (ws?.lastJsonMessage?.length) {
+        if(timeFrame.changed){
+          series.current=[]
+        }
         settimeFrame({time:timeFrame.time,changed:false})
         const data = ws?.lastJsonMessage[1];
         let timestamp, mapped_arr;
