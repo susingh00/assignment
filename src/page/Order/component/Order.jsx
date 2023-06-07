@@ -1,5 +1,6 @@
 import React from "react";
 import { Chart } from "../../../component/Chart";
+import { Link } from "react-router-dom";
 
 export const Order = (props) => {
   let options = {
@@ -39,7 +40,10 @@ export const Order = (props) => {
   return (
     <div>
       <div className="p-2 flex flex-row items-center border-b-2 border-gray-500">
-        <i className="fa-solid fa-chevron-down text-gray-400 mr-2"></i>
+        <Link className="mx-2" to={"/"}>
+          <i class="fa-solid fa-circle-chevron-left text-xl"></i>
+        </Link>
+        {/* <i className="fa-solid fa-chevron-down text-gray-400 mr-2"></i> */}
         <h2>
           ORDER BOOK <span className="text-gray-400">BTC/USD</span>
         </h2>
@@ -53,15 +57,22 @@ export const Order = (props) => {
             <p className="text-gray-400">TOTAL</p>
             <p className="text-gray-400">PRICE</p>
           </div>
-            {props.bids.map((bid, index) => (
-              <div className="flex justify-evenly relative" key={index} style={{overflow:"hidden"}}>
-                <div className="green-box" style={{width:(Number(bid.total)*10)/1.2+"%"}}></div>
-                <p>{bid.count}</p>
-                <p>{bid.amount}</p>
-                <p>{Number(bid.total).toFixed(4)}</p>
-                <p>{bid.price.toLocaleString()}</p>
-              </div>
-            ))}
+          {props.bids.map((bid, index) => (
+            <div
+              className="flex justify-evenly relative"
+              key={index}
+              style={{ overflow: "hidden" }}
+            >
+              <div
+                className="green-box"
+                style={{ width: (Number(bid.total) * 10) / 1.2 + "%" }}
+              ></div>
+              <p>{bid.count}</p>
+              <p>{bid.amount}</p>
+              <p>{Number(bid.total).toFixed(4)}</p>
+              <p>{bid.price.toLocaleString()}</p>
+            </div>
+          ))}
         </div>
         <div className="w-3/6">
           <div className="flex justify-evenly">
@@ -70,15 +81,22 @@ export const Order = (props) => {
             <p className="text-gray-400">TOTAL</p>
             <p className="text-gray-400">PRICE</p>
           </div>
-            {props.asks.map((ask, index) => (
-              <div className="flex justify-evenly relative" key={index} style={{overflow:"hidden"}}>
-                <div className="red-box" style={{width:(Number(ask.total)*10)/2+"%"}}></div>
-                <p>{ask.count}</p>
-                <p>{ask.amount}</p>
-                <p>{Number(ask.total).toFixed(4)}</p>
-                <p>{ask.price.toLocaleString()}</p>
-              </div>
-            ))}
+          {props.asks.map((ask, index) => (
+            <div
+              className="flex justify-evenly relative"
+              key={index}
+              style={{ overflow: "hidden" }}
+            >
+              <div
+                className="red-box"
+                style={{ width: (Number(ask.total) * 10) / 2 + "%" }}
+              ></div>
+              <p>{ask.count}</p>
+              <p>{ask.amount}</p>
+              <p>{Number(ask.total).toFixed(4)}</p>
+              <p>{ask.price.toLocaleString()}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

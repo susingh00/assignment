@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Chart } from "../../../component/Chart";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 export function ChartComponent(props) {
   const [currentPrice, setcurrentPrice] = useState(
@@ -19,6 +20,7 @@ export function ChartComponent(props) {
         <div className="flex items-center">
           <p className="text-gray-400 text-sm">SHOW LIQUIDATIONS</p>
           <i className="fa-solid fa-arrows-rotate text-gray-200 ms-2 text-sm"></i>
+          <Link className="mx-2 border-2 p-2 rounded" to={"/order"}>Book Order's</Link>
         </div>
       </div>
       <div className="p-2">
