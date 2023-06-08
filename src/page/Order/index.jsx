@@ -11,9 +11,8 @@ export const OrderScreen = () => {
     onOpen: () => console.log("opened"),
     shouldReconnect: (closeEvent) => true,
     onMessage: (_msg) => {
-      console.log('ws?.lastJsonMessage: ', ws?.lastJsonMessage);
-      if (ws?.lastJsonMessage?.length == 2) {
-        let values = ws?.lastJsonMessage[1];
+      if (ws.lastJsonMessage?.length == 2) {
+        let values = ws.lastJsonMessage[1];
         if (values.length === 3) {
           handleMap(values);
         } else if(values.length>3){

@@ -52,7 +52,6 @@ export const ChartScreen = () => {
     ws.sendJsonMessage(msg);
     settimeFrame({time,changed:true});
   };
-  console.log('series: ', series);
   return series.length ? (
     <ChartComponent
       series={series}
