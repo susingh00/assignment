@@ -3,13 +3,13 @@ import { ChartComponent } from "./component/Chart";
 import { socket_url } from "../../utils/socket";
 import useWebSocket from "react-use-websocket";
 export const ChartScreen = () => {
-  const series = useRef([]);
+  // const series = useRef([]);
+  const [series, setseries] = useState([])
   const [timeFrame, settimeFrame] = useState({time:"1m",changed:false});
   const ws = useWebSocket(socket_url, {
     onOpen: () => console.log("opened"),
     shouldReconnect: (closeEvent) => true,
     onMessage: (_msg) => {
-      // console.log('ws?.lastJsonMessage: ', ws?.lastJsonMessage);
       if (ws?.lastJsonMessage?.length) {
         if(timeFrame.changed){
           series.current=[]
@@ -22,16 +22,20 @@ export const ChartScreen = () => {
           mapped_arr = [];
           mapped_arr.push(timestamp);
           mapped_arr.push(data.slice(1, 5));
-          series.current.push(mapped_arr);
+          setseries(prev=>[...prev,mapped_arr])
+          // series.current.push(mapped_arr);
         }
         if (data.length > 6) {
+          let final=[]
           data.map((item) => {
             timestamp = item[0];
             mapped_arr = [];
             mapped_arr.push(timestamp);
             mapped_arr.push(item.slice(1, 5));
-            series.current.push(mapped_arr);
+            final.push(mapped_arr)
+            // series.current.push(mapped_arr);
           });
+          setseries(prev=>[...prev,...final])
         }
       }
     },
@@ -48,9 +52,10 @@ export const ChartScreen = () => {
     ws.sendJsonMessage(msg);
     settimeFrame({time,changed:true});
   };
-  return series.current.length ? (
+  console.log('series: ', series);
+  return series.length ? (
     <ChartComponent
-      series={series.current}
+      series={series}
       handleTimeFrame={handleTimeFrame}
     />
   ) : null;
