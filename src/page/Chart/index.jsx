@@ -12,7 +12,7 @@ export const ChartScreen = () => {
     onMessage: (_msg) => {
       if (ws?.lastJsonMessage?.length) {
         if(timeFrame.changed){
-          series.current=[]
+          setseries([])
         }
         settimeFrame({time:timeFrame.time,changed:false})
         const data = ws?.lastJsonMessage[1];
