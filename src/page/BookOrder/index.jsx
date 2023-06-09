@@ -2,35 +2,36 @@ import useWebSocket from "react-use-websocket";
 import { Order } from "./component/Order";
 import { useEffect, useState } from "react";
 import { socket_url } from "../../utils/socket";
+import { orderBook } from "../../utils/constant";
 
-export const OrderScreen = () => {
-  const [bids, setbids] = useState([]);
-  const [asks, setasks] = useState([]);
-  const [series, setseries] = useState([])
+export const BookOrder = () => {
+  const [bids, setBids] = useState([]);
+  const [asks, setAsks] = useState([]);
+  const [series, setSeries] = useState([])
   const ws = useWebSocket(socket_url, {
     onOpen: () => console.log("opened"),
     shouldReconnect: (closeEvent) => true,
     onMessage: (_msg) => {
-      if (ws.lastJsonMessage?.length == 2) {
-        let values = ws.lastJsonMessage[1];
+      if (ws.lastJsonMessage?.length === 2) {
+        let values = ws.lastJsonMessage[orderBook.DATA];
         if (values.length === 3) {
-          handleMap(values);
+          orderBookParser(values);
         } else if(values.length>3){
           values.forEach((value) => {
-            handleMap(value);
+            orderBookParser(value);
           });
         }
       }
     },
   });
-  const handleMap = (values) => {
-    if (values[1] > 0) {
-      if (values[2] > 0) {
-        let bid_payload = {
-          count: values[1],
-          amount: values[2].toFixed(4),
-          price: values[0],
-          total: values[2].toFixed(4)
+  const orderBookParser = (values) => {
+    if (values[orderBook.COUNT] > 0) {
+      if (values[orderBook.AMOUNT] > 0) {
+        const bid_payload = {
+          count: values[orderBook.COUNT],
+          amount: values[orderBook.AMOUNT].toFixed(4),
+          price: values[orderBook.PRICE],
+          total: values[orderBook.AMOUNT].toFixed(4)
         };
         let updated_bids = [];
         if (bids.length) {
@@ -48,18 +49,19 @@ export const OrderScreen = () => {
           let data=updated_bids.map(bid=>{
             return [bid.price,bid.amount]
           })
-          setseries([...data])
-          setbids(prev=>[...updated_bids]);
+          setSeries([...data])
+          setBids([...updated_bids]);
         } else {
           updated_bids.push(bid_payload);
-          setbids(prev=>[...prev,bid_payload]);
+          setBids(prev=>[...prev,bid_payload]);
         }
-      } else {
-        let ask_payload = {
-          count: values[1],
-          amount:Math.abs(values[2].toFixed(4)),
-          price: values[0],
-          total: Math.abs(values[2].toFixed(4))
+      } 
+      else {
+        const ask_payload = {
+          count: values[orderBook.COUNT],
+          amount:Math.abs(values[orderBook.AMOUNT].toFixed(4)),
+          price: values[orderBook.PRICE],
+          total: Math.abs(values[orderBook.AMOUNT].toFixed(4))
         };
         let updated_asks = [];
         if (asks.length) {
@@ -74,21 +76,20 @@ export const OrderScreen = () => {
               updated_asks.push(ask);
             }
           });
-          setasks(prev=>[...updated_asks]);
+          setAsks(prev=>[...updated_asks]);
         } else {
-          // updated_asks.push(ask_payload);
-          setasks(prev=>[...prev,ask_payload]);
+          setAsks(prev=>[...prev,ask_payload]);
         }
       }
-    } else if (values[2] == 0) {
-      if (values[2] == 1) {
+    } else if (values[orderBook.COUNT] == 0) {
+      if (values[orderBook.AMOUNT] == 1) {
         let remove_bids = [...bids];
-        let filter_bids = remove_bids.filter((bid) => bid.price !== values[0]);
-        setbids([...filter_bids]);
-      } else if (values[2] == -1) {
+        let filter_bids = remove_bids.filter((bid) => bid.price !== values[orderBook.PRICE]);
+        setBids([...filter_bids]);
+      } else if (values[orderBook.AMOUNT] == -1) {
         let remove_asks = [...asks];
-        let filter_asks = remove_asks.filter((ask) => ask.price !== values[0]);
-        setbids([...filter_asks]);
+        let filter_asks = remove_asks.filter((ask) => ask.price !== values[orderBook.PRICE]);
+        setBids([...filter_asks]);
       }
     }
   };

@@ -2,14 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { Chart } from "../../../component/Chart";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { routes } from "../../../utils/routes";
+import { series } from "../../../utils/constant";
 
-export function ChartComponent(props) {
+export function OHLC(props) {
   const [currentPrice, setcurrentPrice] = useState(
-    props.series[props.series.length - 1][1]
-    );
-    useEffect(() => {
-      setcurrentPrice(props.series[props.series.length - 1][1]);
-    }, [props.series]);
+    props.series[props.series.length - 1][series.DATA]
+  );
+  useEffect(() => {
+    setcurrentPrice(props.series[props.series.length - 1][series.DATA]);
+  }, [props.series]);
 
   return (
     <div>
@@ -20,7 +22,9 @@ export function ChartComponent(props) {
         <div className="flex items-center">
           <p className="text-gray-400 text-sm">SHOW LIQUIDATIONS</p>
           <i className="fa-solid fa-arrows-rotate text-gray-200 ms-2 text-sm"></i>
-          <Link className="mx-2 border-2 p-2 rounded" to={"/order"}>Book Order's</Link>
+          <Link className="mx-2 border-2 p-2 rounded" to={routes.orderBook}>
+            Book Order's
+          </Link>
         </div>
       </div>
       <div className="p-2">
@@ -42,34 +46,23 @@ export function ChartComponent(props) {
                 BTC/USD 30 Bitfinex{" "}
                 <span className="text-gray-400 mx-1">O</span>
                 <span className="text-green-600">
-                  {currentPrice[0]}
+                  {currentPrice[series.MTS]}
                 </span>
                 <span className="text-gray-400 mx-1">H</span>
                 <span className="text-green-600">
-                  {currentPrice[1]}
+                  {currentPrice[series.HIGH]}
                 </span>
                 <span className="text-gray-400 mx-1">L</span>
                 <span className="text-green-600">
-                  {currentPrice[2]}
+                  {currentPrice[series.LOW]}
                 </span>
                 <span className="text-gray-400 mx-1">C</span>
                 <span className="text-green-600">
-                  {currentPrice[3]}
+                  {currentPrice[series.CLOSE]}
                 </span>
               </h5>
             </div>
           </div>
-          {/* <div>
-            <button className="p-2">
-              <i className="fa-solid fa-maximize text-gray-400"></i>
-            </button>
-            <button className="p-2">
-              <i className="fa-solid fa-maximize text-gray-400"></i>
-            </button>
-            <button className="p-2">
-              <i className="fa-solid fa-download text-gray-400"></i>
-            </button>
-          </div> */}
         </div>
         <div className="flex">
           <div
@@ -103,22 +96,37 @@ export function ChartComponent(props) {
             </button>
           </div>
           <div style={{ flex: "0.95" }}>
-            <Chart series={props.series}/>
+            <Chart series={props.series} />
             <div className="flex justify-between items-center">
               <div>
-                <button className="p-2" onClick={()=>props.handleTimeFrame("1m")}>
+                <button
+                  className="p-2"
+                  onClick={() => props.handleTimeFrame("1m")}
+                >
                   <p className="text-sm text-gray-400">1m</p>
                 </button>
-                <button className="p-2" onClick={()=>props.handleTimeFrame("5m")}>
+                <button
+                  className="p-2"
+                  onClick={() => props.handleTimeFrame("5m")}
+                >
                   <p className="text-sm text-gray-400">5m</p>
                 </button>
-                <button className="p-2" onClick={()=>props.handleTimeFrame("1D")}>
+                <button
+                  className="p-2"
+                  onClick={() => props.handleTimeFrame("1D")}
+                >
                   <p className="text-sm text-gray-400">1D</p>
                 </button>
-                <button className="p-2" onClick={()=>props.handleTimeFrame("1W")}>  
+                <button
+                  className="p-2"
+                  onClick={() => props.handleTimeFrame("1W")}
+                >
                   <p className="text-sm text-gray-400">1w</p>
                 </button>
-                <button className="p-2" onClick={()=>props.handleTimeFrame("1M")}>
+                <button
+                  className="p-2"
+                  onClick={() => props.handleTimeFrame("1M")}
+                >
                   <p className="text-sm text-gray-400">1M</p>
                 </button>
               </div>
