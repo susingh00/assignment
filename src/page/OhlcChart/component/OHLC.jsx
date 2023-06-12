@@ -3,7 +3,7 @@ import { Chart } from "../../../component/Chart";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { routes } from "../../../utils/routes";
-import { series } from "../../../utils/constant";
+import { epochTime, series } from "../../../utils/constant";
 
 export function OHLC(props) {
   const [currentPrice, setcurrentPrice] = useState(
@@ -30,12 +30,27 @@ export function OHLC(props) {
       <div className="p-2">
         <div className="flex justify-between px-2">
           <div>
-            <div>
+            <div className="flex">
               <button className="p-2">
-                <p className="text-sm text-gray-400">30m</p>
+                <p className="text-sm text-gray-400">
+                  {epochTime[props.timeFrame].timeFrame}
+                </p>
               </button>
               <button className="p-2">
-                <p className="text-sm  text-gray-400">-</p>
+                <span className="text-sm text-gray-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 28 28"
+                    width="28"
+                    height="28"
+                    fill="currentColor"
+                  >
+                    <path d="M17 11v6h3v-6h-3zm-.5-1h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"></path>
+                    <path d="M18 7h1v3.5h-1zm0 10.5h1V21h-1z"></path>
+                    <path d="M9 8v12h3V8H9zm-.5-1h4a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5z"></path>
+                    <path d="M10 4h1v3.5h-1zm0 16.5h1V24h-1z"></path>
+                  </svg>
+                </span>
               </button>
               <button className="p-2">
                 <p className="text-sm  text-gray-400">Indicators</p>{" "}
@@ -45,19 +60,19 @@ export function OHLC(props) {
               <h5>
                 BTC/USD 30 Bitfinex{" "}
                 <span className="text-gray-400 mx-1">O</span>
-                <span className="text-green-600">
-                  {currentPrice[series.MTS]}
+                <span className="text-green-600" id="price-action">
+                  {currentPrice[series.OPEN]}
                 </span>
                 <span className="text-gray-400 mx-1">H</span>
-                <span className="text-green-600">
+                <span className="text-green-600" id="price-action">
                   {currentPrice[series.HIGH]}
                 </span>
                 <span className="text-gray-400 mx-1">L</span>
-                <span className="text-green-600">
+                <span className="text-green-600" id="price-action">
                   {currentPrice[series.LOW]}
                 </span>
                 <span className="text-gray-400 mx-1">C</span>
-                <span className="text-green-600">
+                <span className="text-green-600" id="price-action">
                   {currentPrice[series.CLOSE]}
                 </span>
               </h5>
@@ -99,40 +114,27 @@ export function OHLC(props) {
             <Chart series={props.series} />
             <div className="flex justify-between items-center">
               <div>
-                <button
-                  className="p-2"
-                  onClick={() => props.handleTimeFrame("1m")}
-                >
-                  <p className="text-sm text-gray-400">1m</p>
-                </button>
-                <button
-                  className="p-2"
-                  onClick={() => props.handleTimeFrame("5m")}
-                >
-                  <p className="text-sm text-gray-400">5m</p>
-                </button>
-                <button
-                  className="p-2"
-                  onClick={() => props.handleTimeFrame("1D")}
-                >
-                  <p className="text-sm text-gray-400">1D</p>
-                </button>
-                <button
-                  className="p-2"
-                  onClick={() => props.handleTimeFrame("1W")}
-                >
-                  <p className="text-sm text-gray-400">1w</p>
-                </button>
-                <button
-                  className="p-2"
-                  onClick={() => props.handleTimeFrame("1M")}
-                >
-                  <p className="text-sm text-gray-400">1M</p>
-                </button>
+                {Object.keys(epochTime).map((time, index) => (
+                  <button
+                    className="p-2"
+                    onClick={() => props.fecthCandle(time)}
+                    key={index}
+                  >
+                    <p
+                      className={`text-sm ${
+                        props.timeFrame === time
+                          ? "text-white"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {time}
+                    </p>
+                  </button>
+                ))}
               </div>
               <div className="flex">
                 <p className="text-sm text-gray-400">
-                  {moment().format("hh:mm:ss (UTC)")}
+                  {moment().utc().format("hh:mm:ss (UTC)")}
                 </p>
                 <div
                   className="text-gray-400 mx-2"
