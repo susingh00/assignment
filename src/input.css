@@ -3,7 +3,7 @@
 @tailwind utilities;
 .green-box {
   position: absolute;
-  background: green;
+  background: #0c474b;
   top: 0;
   z-index: -2;
   bottom: 0;
@@ -13,11 +13,11 @@
 }
 .red-box {
   position: absolute;
-  background: red;
+  background: #3d313f;
   top: 0;
   z-index: -2;
   bottom: 0;
-  opacity: 0.6;
+  /* opacity: 0.6; */
   left: 0;
   /* width: 100px; */
 }

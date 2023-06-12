@@ -16,13 +16,13 @@ export const Order = (props: BookOrderPropsType) => {
           ORDER BOOK <span className="text-gray-400">BTC/USD</span>
         </h2>
       </div>
-      <div className="flex justify-center p-10">
+      <div className="flex justify-center text-center p-10">
         <div className="w-3/6">
           <div className="flex justify-evenly">
-            <p className="text-gray-400">COUNT</p>
-            <p className="text-gray-400">AMOUNT</p>
-            <p className="text-gray-400">TOTAL</p>
-            <p className="text-gray-400">PRICE</p>
+            <p className="text-gray-400 w-2">COUNT</p>
+            <p className="text-gray-400 w-2">AMOUNT</p>
+            <p className="text-gray-400 w-2">TOTAL</p>
+            <p className="text-gray-400 w-2">PRICE</p>
           </div>
           {props.bids.map((bid: BookOrderType, index: number) => (
             <div
@@ -34,19 +34,19 @@ export const Order = (props: BookOrderPropsType) => {
                 className="green-box"
                 style={{ width: (Number(bid.total) * 10) / 2 + "%" }}
               ></div>
-              <p>{bid.count}</p>
-              <p>{bid.amount}</p>
-              <p>{Number(bid.total).toFixed(4)}</p>
-              <p>{bid.price.toLocaleString()}</p>
+              <p className="w-2">{bid.count}</p>
+              <p className="w-2">{bid.amount}</p>
+              <p className="w-2">{Number(bid.total).toFixed(4)}</p>
+              <p className="w-2">{bid.price.toLocaleString()}</p>
             </div>
           ))}
         </div>
         <div className="w-3/6">
           <div className="flex justify-evenly">
-            <p className="text-gray-400">PRICE</p>
-            <p className="text-gray-400">TOTAL</p>
-            <p className="text-gray-400">AMOUNT</p>
-            <p className="text-gray-400">COUNT</p>
+            <p className="text-gray-400 w-2">PRICE</p>
+            <p className="text-gray-400 w-2">TOTAL</p>
+            <p className="text-gray-400 w-2">AMOUNT</p>
+            <p className="text-gray-400 w-2">COUNT</p>
           </div>
           {props.asks.map((ask: BookOrderType, index: number) => (
             <div
@@ -58,10 +58,10 @@ export const Order = (props: BookOrderPropsType) => {
                 className="red-box"
                 style={{ width: (Number(ask.total) * 10) / 2 + "%" }}
               ></div>
-              <p>{ask.price.toLocaleString()}</p>
-              <p>{Number(ask.total).toFixed(4)}</p>
-              <p>{ask.amount}</p>
-              <p>{ask.count}</p>
+              <p className="w-2">{ask.price.toLocaleString()}</p>
+              <p className="w-2">{Number(ask.total).toFixed(4)}</p>
+              <p className="w-2">{ask.amount}</p>
+              <p className="w-2">{ask.count}</p>
             </div>
           ))}
         </div>

@@ -65,7 +65,12 @@ Chart.defaultProps = {
       theme: "dark",
     },
     grid: {
-      borderColor: "#ccc",
+      borderColor: "#cccccc40",
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
     },
     xaxis: {
       type: "datetime",
@@ -78,6 +83,12 @@ Chart.defaultProps = {
     yaxis: {
       opposite: true,
       enabled: true,
+      tickAmount: 10,
+      labels: {
+        formatter: (value: number) => {
+          return value.toFixed(2);
+        },
+      },
     },
   },
 };

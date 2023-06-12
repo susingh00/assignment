@@ -22,7 +22,7 @@ export function OHLC(props: OHLCType) {
         <div className="flex items-center">
           <p className="text-gray-400 text-sm">SHOW LIQUIDATIONS</p>
           <i className="fa-solid fa-arrows-rotate text-gray-200 ms-2 text-sm"></i>
-          <Link className="mx-2 border-2 p-2 rounded" to={routes.orderBook}>
+          <Link className="mx-2 border-2 px-2 rounded" to={routes.orderBook}>
             Book Order's
           </Link>
         </div>
