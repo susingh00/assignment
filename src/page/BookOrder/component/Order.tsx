@@ -1,14 +1,16 @@
-import React from "react";
-import { Chart } from "../../../component/Chart";
 import { Link } from "react-router-dom";
 import { routes } from "../../../utils/routes";
+import {
+  BookOrderPropsType,
+  BookOrderType,
+} from "../../../utils/types/BookOrder.types";
 
-export const Order = (props) => {
+export const Order = (props: BookOrderPropsType) => {
   return (
     <div>
       <div className="p-2 flex flex-row items-center border-b-2 border-gray-500">
         <Link className="mx-2" to={routes.ohlc}>
-          <i class="fa-solid fa-circle-chevron-left text-xl"></i>
+          <i className="fa-solid fa-circle-chevron-left text-xl"></i>
         </Link>
         <h2>
           ORDER BOOK <span className="text-gray-400">BTC/USD</span>
@@ -22,7 +24,7 @@ export const Order = (props) => {
             <p className="text-gray-400">TOTAL</p>
             <p className="text-gray-400">PRICE</p>
           </div>
-          {props.bids.map((bid, index) => (
+          {props.bids.map((bid: BookOrderType, index: number) => (
             <div
               className="flex justify-evenly relative"
               key={index}
@@ -46,7 +48,7 @@ export const Order = (props) => {
             <p className="text-gray-400">AMOUNT</p>
             <p className="text-gray-400">COUNT</p>
           </div>
-          {props.asks.map((ask, index) => (
+          {props.asks.map((ask: BookOrderType, index: number) => (
             <div
               className="flex justify-evenly relative"
               key={index}

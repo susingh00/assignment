@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Route, Routes as Router } from "react-router-dom";
 import { OhlcChart } from "../page/OhlcChart";
 import { BookOrder } from "../page/BookOrder";

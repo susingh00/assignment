@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { OHLC } from "./component/OHLC";
 import { socket_url } from "../../utils/socket";
 import useWebSocket from "react-use-websocket";
@@ -6,12 +6,14 @@ import { series as constant, epochTime } from "../../utils/constant";
 import moment from "moment";
 import { apiCall } from "../../utils/apiCall";
 import { endpoint } from "../../utils/endPoints";
+import { seriesType } from "../../utils/types/OHLC.type";
+import { subtractTimeType } from "../../utils/types/constant.type";
 export const OhlcChart = () => {
-  const [series, setSeries] = useState([]);
+  const [series, setSeries] = useState<number[]>([]);
   const [timeFrame, setTimeFrame] = useState("1h");
   const ws = useWebSocket(socket_url, {
     onOpen: () => console.log("opened"),
-    shouldReconnect: (closeEvent) => true,
+    shouldReconnect: () => true,
     onMessage: (_msg) => {
       ohlcParser();
     },
@@ -19,10 +21,10 @@ export const OhlcChart = () => {
   useEffect(() => {
     fecthCandle("1h");
   }, []);
-  const fecthCandle = async (time) => {
+  const fecthCandle = async (time: string) => {
     try {
+      let subtractTime: subtractTimeType = { num: 1, time: "hour" };
       setTimeFrame(time);
-      let subtractTime = { num: 1, time: "hour" };
       switch (time) {
         case "6h":
           subtractTime.num = 6;
@@ -42,6 +44,7 @@ export const OhlcChart = () => {
         case "1m":
           subtractTime.num = 1;
           subtractTime.time = "month";
+          break;
         case "3m":
           subtractTime.num = 3;
           subtractTime.time = "month";
@@ -61,16 +64,17 @@ export const OhlcChart = () => {
         .utc()
         .subtract(subtractTime.num, subtractTime.time)
         .valueOf();
+
       const endTime = moment().utc().valueOf();
       const limit = epochTime[time].limit;
       const tradeTime = epochTime[time].timeFrame;
       const path = `${endpoint.candles}:${tradeTime}:tBTCUSD/hist?start=${startTime}&end=${endTime}&limit=${limit}`;
       const res = await apiCall("GET", path);
       if (res.status === 200) {
-        let timeStamp,
-          mappedArr,
-          final = [];
-        res.data.map((item) => {
+        let timeStamp: number,
+          mappedArr: seriesType,
+          final: number[] = [];
+        res.data.map((item: number[]) => {
           timeStamp = item[constant.MTS];
           mappedArr = [];
           mappedArr.push(timeStamp);
@@ -86,8 +90,9 @@ export const OhlcChart = () => {
   };
   const ohlcParser = () => {
     if (ws.lastJsonMessage?.length) {
-      let timeStamp, mappedArr;
-      const data = ws.lastJsonMessage[constant.DATA];
+      let timeStamp, mappedArr: seriesType;
+      let eventData = ws.lastJsonMessage;
+      const data: [] | any = eventData ?? eventData[constant.DATA];
       if (data.length === 6) {
         timeStamp = data[constant.MTS];
         mappedArr = [];
@@ -98,7 +103,7 @@ export const OhlcChart = () => {
     }
   };
 
-  const handleTimeFrame = (time) => {
+  const handleTimeFrame = (time: string) => {
     let msg = {
       event: "subscribe",
       channel: "candles",

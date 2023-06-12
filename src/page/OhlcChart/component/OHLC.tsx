@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Chart } from "../../../component/Chart";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { routes } from "../../../utils/routes";
 import { epochTime, series } from "../../../utils/constant";
+import { OHLCType } from "../../../utils/types/OHLC.type";
 
-export function OHLC(props) {
+export function OHLC(props: OHLCType) {
   const [currentPrice, setcurrentPrice] = useState(
     props.series[props.series.length - 1][series.DATA]
   );
   useEffect(() => {
     setcurrentPrice(props.series[props.series.length - 1][series.DATA]);
   }, [props.series]);
-
   return (
     <div>
       <div className="flex justify-between p-2 border-gray-400 border-b-2">
